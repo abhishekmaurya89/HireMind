@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
+import { useAppContext } from "../Contexts/AppContext";
 function Signup() {
   const [formData, setFormData] = useState({
     name: "",
@@ -7,42 +8,33 @@ function Signup() {
     password: "",
     confirmPassword: "",
   });
-
+  const { setUser, setToken } = useAppContext();
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
-
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (formData.password !== formData.confirmPassword) {
       return alert("Passwords do not match");
     }
     const API_URL = import.meta.env.VITE_API_URL;
-    const data=await axios.post(`${API_URL}/api/auth/signup`,
-      formData
-    );
-    localStorage.setItem("token",data.token);
+    const data = await axios.post(`${API_URL}/api/auth/signup`, formData);
+    setUser(data.user);
+    setToken(data.token);
+    localStorage.setItem("token", data.token);
   };
-
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl">
-        
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white">
-            HireMind
-          </h1>
-          <p className="text-slate-400 mt-2">
-            Create your account
-          </p>
+          <h1 className="text-3xl font-bold text-white">HireMind</h1>
+          <p className="text-slate-400 mt-2">Create your account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-
           <div>
             <label className="block text-sm text-slate-300 mb-2">
               Full Name
@@ -57,11 +49,8 @@ function Signup() {
               required
             />
           </div>
-
           <div>
-            <label className="block text-sm text-slate-300 mb-2">
-              Email
-            </label>
+            <label className="block text-sm text-slate-300 mb-2">Email</label>
             <input
               type="email"
               name="email"
@@ -72,7 +61,6 @@ function Signup() {
               required
             />
           </div>
-
           <div>
             <label className="block text-sm text-slate-300 mb-2">
               Password
@@ -87,7 +75,6 @@ function Signup() {
               required
             />
           </div>
-
           <div>
             <label className="block text-sm text-slate-300 mb-2">
               Confirm Password
@@ -102,7 +89,6 @@ function Signup() {
               required
             />
           </div>
-
           <button
             type="submit"
             className="w-full py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 transition text-white font-semibold"

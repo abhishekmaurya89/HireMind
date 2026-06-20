@@ -1,50 +1,42 @@
 import { useState } from "react";
 import axios from "axios";
+import { useAppContext } from "../Contexts/AppContext";
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
+  
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
-
+  const [user,setUser]=useAppContext();
+  const [token,setToken]=useAppContext();
   const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  const API_URL = import.meta.env.VITE_API_URL;
-
-  const response = await axios.post(
-    `${API_URL}/api/auth/login`,
-    formData
-  );
-
-  localStorage.setItem("token", response.data.token);
-};
+    e.preventDefault();
+    const API_URL = import.meta.env.VITE_API_URL;
+    const response = await axios.post(`${API_URL}/api/auth/login`, formData);
+    setUser(response.data.user);
+    setToken(response.data.token);
+    localStorage.setItem("token", response.data.token);
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl">
-        
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white">
-            HireMind
-          </h1>
+          <h1 className="text-3xl font-bold text-white">HireMind</h1>
           <p className="text-slate-400 mt-2">
             Real-Time Technical Interview Platform
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-
           <div>
-            <label className="block text-sm text-slate-300 mb-2">
-              Email
-            </label>
+            <label className="block text-sm text-slate-300 mb-2">Email</label>
             <input
               type="email"
               name="email"
