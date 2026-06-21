@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken'
-
 const authMiddleware=(req,res)=>{
     const token=req.header.authorization;
     if(!token){
@@ -13,3 +12,4 @@ const authMiddleware=(req,res)=>{
         res.status(404).json("Could not verify user")
     }
 }
+export default authMiddleware;
