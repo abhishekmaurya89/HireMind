@@ -1,20 +1,19 @@
 import { useState } from "react";
 import axios from "axios";
-import { useAppContext } from "../Contexts/AppContext";
+import { useAppContext } from "../Contexts/AppContext.jsx";
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  
+
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
-  const [user,setUser]=useAppContext();
-  const [token,setToken]=useAppContext();
+  const { user, setUser, token, setToken } = useAppContext();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const API_URL = import.meta.env.VITE_API_URL;
