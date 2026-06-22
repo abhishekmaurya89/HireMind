@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import socket from "../socket/socket";
 import { useParams } from "react-router-dom";
+import { useAppContext } from "../Contexts/AppContext";
 function Chats({ chats, setChats }) {
   const [message, setMessage] = useState("");
   const { roomId } = useParams();
+  const { user } = useAppContext();
+  console.log(user);
   const handleSend = () => {
     if (!message.trim()) return;
     socket.emit("send-message", {
       roomId,
-      name,
+      name: user?.name,
       message,
     });
+    console.log(user);
     setMessage("");
   };
   return (

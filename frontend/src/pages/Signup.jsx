@@ -24,7 +24,9 @@ function Signup() {
     const data = await axios.post(`${API_URL}/api/auth/signup`, formData);
     setUser(data.user);
     setToken(data.token);
-    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(response.data.user));
+
+    localStorage.setItem("token", response.data.token);
   };
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">

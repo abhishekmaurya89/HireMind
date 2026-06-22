@@ -13,11 +13,12 @@ export const initialiseSocket = (io) => {
       socket.to(roomId).emit("receive-code", code);
     });
 
-    socket.on("send-message", ({ roomId, message, sender }) => {
+    socket.on("send-message", ({ roomId, message, name }) => {
       io.to(roomId).emit("receive-message", {
-        sender,
+        name,
         message,
       });
+      console.log(name)
     });
     socket.on("disconnect", () => {
       console.log("User disconnected:", socket.id);
