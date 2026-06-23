@@ -1,13 +1,15 @@
 import React from "react";
+import socket from "../socket/socket";
+import { useEffect } from "react";
 function Participants({ participants }) {
   return (
-    <div>
-      <h2 className="text-white text-lg font-semibold mb-4">Participants</h2>
+    <div className="p-4 border-b border-slate-800">
+      <h2 className="text-white font-semibold mb-3">Participants</h2>
       <div className="space-y-2">
-        {participants.map((participant, index) => (
+        {participants.map((participant) => (
           <div
-            key={index}
-            className="bg-slate-800 text-slate-200 p-2 rounded-md"
+            key={participant.socketId}
+            className="bg-slate-800 text-white px-3 py-2 rounded-lg"
           >
             {participant.name}
           </div>
@@ -16,4 +18,5 @@ function Participants({ participants }) {
     </div>
   );
 }
+
 export default Participants;
