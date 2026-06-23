@@ -1,12 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
 import { useAppContext } from "../Contexts/AppContext.jsx";
+import { useNavigate } from "react-router-dom";
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
+  const navigate=useNavigate();
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -22,6 +23,7 @@ function Login() {
     setToken(response.data.token);
     localStorage.setItem("user", JSON.stringify(response.data.user));
     localStorage.setItem("token", response.data.token);
+    navigate("/");
   };
 
   return (
@@ -73,7 +75,7 @@ function Login() {
 
         <p className="text-center text-slate-400 text-sm mt-6">
           Don't have an account?{" "}
-          <span className="text-indigo-500 cursor-pointer hover:underline">
+          <span onClick={()=>navigate("/signup")} className=" text-indigo-500 cursor-pointer hover:underline">
             Sign Up
           </span>
         </p>

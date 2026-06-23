@@ -1,5 +1,4 @@
-const rooms = {};
-
+import { rooms } from "../controllers/RoomController.js";
 export const initialiseSocket = (io) => {
   io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
@@ -20,6 +19,7 @@ export const initialiseSocket = (io) => {
         rooms[roomId].participants.push({
           socketId: socket.id,
           name: user.name,
+          code:rooms[roomId].code
         });
       }
       io.to(roomId).emit("participants-update", rooms[roomId].participants);

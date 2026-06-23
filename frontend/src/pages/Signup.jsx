@@ -1,8 +1,10 @@
 import { useContext, useState } from "react";
 import axios from "axios";
 import { useAppContext } from "../Contexts/AppContext";
+import { useNavigate } from "react-router-dom";
 function Signup() {
-  const [formData, setFormData] = useState({
+  const navigate=useNavigate();
+    const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
@@ -25,8 +27,8 @@ function Signup() {
     setUser(data.user);
     setToken(data.token);
     localStorage.setItem("user", JSON.stringify(response.data.user));
-
     localStorage.setItem("token", response.data.token);
+    navigate("/");
   };
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
@@ -101,7 +103,7 @@ function Signup() {
 
         <p className="text-center text-slate-400 text-sm mt-6">
           Already have an account?{" "}
-          <span className="text-indigo-500 cursor-pointer hover:underline">
+          <span onClick={()=>navigate("/login")} className="text-indigo-500 cursor-pointer hover:underline">
             Sign In
           </span>
         </p>

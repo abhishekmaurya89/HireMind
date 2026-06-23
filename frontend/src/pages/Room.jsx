@@ -11,8 +11,8 @@ import { useAppContext } from "../Contexts/AppContext";
 function Room() {
   const { roomId } = useParams();
   const { user } = useAppContext();
-
   const [code, setCode] = useState("");
+  const [language, setLanguage] = useState("cpp");
   const [chats, setChats] = useState([]);
   const [participants, setParticipants] = useState([]);
   useEffect(() => {
@@ -39,7 +39,8 @@ function Room() {
       socket.off("receive-code", handleCode);
     };
   }, []);
-
+  
+  
   useEffect(() => {
     const handleMessage = (messageData) => {
       setChats((prev) => [...prev, messageData]);
