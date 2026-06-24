@@ -30,19 +30,6 @@ function Home() {
 
     try {
       const token = localStorage.getItem("token");
-
-      await axios.post(
-        `${API_URL}/api/rooms/join`,
-        {
-          roomId,
-        },
-        {
-          headers: {
-            Authorization: token,
-          },
-        },
-      );
-
       navigate(`/room/${roomId}`);
     } catch (error) {
       alert(error.response?.data?.message || "Room not found");
