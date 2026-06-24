@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import {rooms} from './room.js'
+import { rooms } from "./room.js";
 export const createRoom = async (req, res) => {
   try {
     const roomId = uuidv4().slice(0, 8);
@@ -9,6 +9,7 @@ export const createRoom = async (req, res) => {
       hostId: req.user.id,
       participants: [],
       code: "",
+      problem: "",
       language: "cpp",
       createdAt: new Date(),
     };
@@ -22,6 +23,4 @@ export const createRoom = async (req, res) => {
       message: error.message,
     });
   }
-  
 };
-

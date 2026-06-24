@@ -25,6 +25,7 @@ export const initialiseSocket = (io) => {
       }
       io.to(roomId).emit("participants-update", rooms[roomId].participants);
       socket.emit("receive-code", rooms[roomId].code);
+      socket.emit("receive-problem", rooms[roomId].problem);
       console.log(socket.id, "joined", roomId);
     });
     socket.on("code-change", ({ roomId, code }) => {
@@ -32,11 +33,15 @@ export const initialiseSocket = (io) => {
       rooms[roomId].code = code;
       socket.to(roomId).emit("receive-code", code);
     });
+    socket.on("problem-change", ({ roomId, problem }) => {
+      if (!rooms[roomId]) return;
+      rooms[roomId].problem = problem;
+      socket.to(roomId).emit("receive-problem", rooms[roomId].problem);
+      console.log(problem);
+    });
     socket.on("language-change", ({ roomId, language }) => {
       if (!rooms[roomId]) return;
-
       rooms[roomId].language = language;
-
       io.to(roomId).emit("receive-language", language);
     });
     socket.on("send-message", ({ roomId, name, message }) => {

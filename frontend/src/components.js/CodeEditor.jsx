@@ -1,13 +1,30 @@
 import MonacoEditor from "@monaco-editor/react";
 import socket from "../socket/socket";
 import { useParams } from "react-router-dom";
-function CodeEditor({ code, setCode, language, setLanguage }) {
+function CodeEditor({
+  code,
+  setCode,
+  language,
+  setLanguage,
+  problem,
+  setProblem,
+  role,
+}) {
   const { roomId } = useParams();
   const handleEditorChange = (value) => {
     setCode(value || "");
     socket.emit("code-change", {
       roomId,
       code: value,
+    });
+  };
+  const handleProblemChange = (e) => {
+    if(role!=="host")return;
+    const newProblem = e.target.value;
+    setProblem(newProblem);
+    socket.emit("problem-change", {
+      roomId,
+      problem: newProblem,
     });
   };
   const handleLanguageChange = (e) => {
@@ -25,15 +42,20 @@ function CodeEditor({ code, setCode, language, setLanguage }) {
         <select
           value={language}
           onChange={handleLanguageChange}
-          className="bg-slate-800 text-white px-3 py-2 rounded"
+          className="bg-slate-800 text-white px-3 py-2 rounded mb-3"
         >
           <option value="cpp">C++</option>
           <option value="javascript">JavaScript</option>
           <option value="python">Python</option>
           <option value="java">Java</option>
         </select>
+        <textarea
+          value={problem}
+          onChange={handleProblemChange}
+          placeholder="Enter problem statement..."
+          className="w-full h-24 bg-slate-800 text-white p-2 rounded resize-none"
+        />
       </div>
-
       <MonacoEditor
         height="100%"
         language={language}
