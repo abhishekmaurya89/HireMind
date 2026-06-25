@@ -7,6 +7,7 @@ import {Server} from 'socket.io'
 import mongoose from 'mongoose'
 import authRoutes from "./routes/authRoutes.js";
 import roomRoutes from "./routes/roomRoutes.js";
+import serviceRoutes from "./routes/serviceRoutes.js";
 import { initialiseSocket } from "./socket/initailizeSocket.js";
 
 const app = express();
@@ -25,12 +26,12 @@ initialiseSocket(io);
 try {
   await mongoose.connect(process.env.MONGO_URL);
   console.log("MongoDB connected");
-} catch (err) {
+} catch (err) { 
   console.error(err);
 } 
 app.use("/api/auth",authRoutes);
 app.use("/api/rooms", roomRoutes);
-
+app.use("/api/ai", serviceRoutes);
 
 server.listen(5000,()=>{
     console.log("server running on port 5000")

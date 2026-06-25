@@ -88,11 +88,7 @@ function Room() {
       socket.off("participants-update", handleParticipants);
     };
   }, []);
-  useEffect(() => {
-    return () => {
-      socket.emit("leave-room");
-    };
-  }, []);
+  
   useEffect(() => {
     socket.on("interview-ended", () => {
       navigate(`/feedback/${roomId}`);
