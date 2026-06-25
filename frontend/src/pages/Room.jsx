@@ -13,7 +13,7 @@ function Room() {
   const { user } = useAppContext();
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("cpp");
-  const [problem,setProblem]=useState("");
+  const [problem, setProblem] = useState("");
   const [chats, setChats] = useState([]);
   const [participants, setParticipants] = useState([]);
   const handleLeaveRoom = () => {
@@ -53,15 +53,15 @@ function Room() {
       socket.off("receive-code", handleCode);
     };
   }, []);
-  useEffect(()=>{
-    const handleProblem=(newProblem)=>{
+  useEffect(() => {
+    const handleProblem = (newProblem) => {
       setProblem(newProblem);
     };
-    socket.on("receive-problem",handleProblem);
-    return ()=>{
-      socket.off("receive-problem",handleProblem);
-    }
-  })
+    socket.on("receive-problem", handleProblem);
+    return () => {
+      socket.off("receive-problem", handleProblem);
+    };
+  });
   useEffect(() => {
     socket.on("receive-language", (newLanguage) => {
       setLanguage(newLanguage);
@@ -95,9 +95,11 @@ function Room() {
   }, []);
   useEffect(() => {
     socket.on("interview-ended", () => {
-      navigate("/feedback");
+      navigate(`/feedback/${roomId}`);
     });
-    return () => socket.off("interview-ended");
+    return () => {
+      socket.off("interview-ended");
+    };
   }, []);
   return (
     <div className="h-screen flex">

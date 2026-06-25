@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import Room from "./pages/Room";
-
+import Feedback from "./pages/Feedback";
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/login" />;
@@ -28,6 +28,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Room />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/feedback/:roomId"
+          element={
+            <ProtectedRoute>
+              <Feedback />
             </ProtectedRoute>
           }
         />
