@@ -7,6 +7,7 @@ export const initialiseSocket = (io) => {
         console.log("Room not found:", roomId);
         return;
       }
+
       socket.join(roomId);
       socket.roomId = roomId;
       const role = user.id === rooms[roomId].createdBy ? "host" : "candidate";
@@ -28,6 +29,7 @@ export const initialiseSocket = (io) => {
       socket.emit("receive-problem", rooms[roomId].problem);
       console.log(socket.id, "joined", roomId);
     });
+
     socket.on("code-change", ({ roomId, code }) => {
       if (!rooms[roomId]) return;
       rooms[roomId].code = code;
@@ -64,6 +66,29 @@ export const initialiseSocket = (io) => {
     });
     socket.on("end-interview", ({ roomId }) => {
       io.to(roomId).emit("interview-ended");
+    });
+    socket.on("video-ready", ({ roomId }) => {
+      socket.to(roomId).emit("user-joined", {
+        socketId: socket.id,
+      });
+    });
+    socket.on("offer", ({ target, offer }) => {
+      io.to(target).emit("offer", {
+        sender: socket.id,
+        offer,
+      });
+    });
+    socket.on("answer", ({ target, answer }) => {
+      io.to(target).emit("answer", {
+        sender: socket.id,
+        answer,
+      });
+    });
+    socket.on("ice-candidate", ({ target, candidate }) => {
+      io.to(target).emit("ice-candidate", {
+        sender: socket.id,
+        candidate,
+      });
     });
     socket.on("disconnect", () => {
       const roomId = socket.roomId;
