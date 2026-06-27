@@ -5,6 +5,7 @@ import CodeEditor from "../components.js/CodeEditor";
 import Chats from "../components.js/Chats";
 import Particpants from "../components.js/Particpants";
 import socket from "../socket/socket";
+import VideoCall from "../components.js/VideoCall";
 import { useAppContext } from "../Contexts/AppContext";
 function Room() {
   const navigate = useNavigate();
@@ -121,6 +122,7 @@ function Room() {
         <Particpants participants={participants} />
 
         <Chats chats={chats} setChats={setChats} />
+        <VideoCall/>
       </div>
       <div className="flex-1">
         <CodeEditor
