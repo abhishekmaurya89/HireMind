@@ -7,7 +7,8 @@ function Login() {
     email: "",
     password: "",
   });
-  const navigate=useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -17,13 +18,26 @@ function Login() {
   const { user, setUser, token, setToken } = useAppContext();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
     const API_URL = import.meta.env.VITE_API_URL;
-    const response = await axios.post(`${API_URL}/api/auth/login`, formData);
-    setUser(response.data.user);
-    setToken(response.data.token);
-    localStorage.setItem("user", JSON.stringify(response.data.user));
-    localStorage.setItem("token", response.data.token);
-    navigate("/");
+    try {
+      const response = await axios.post(`${API_URL}/api/auth/login`, formData);
+      setUser(response.data.user);
+      setToken(response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      localStorage.setItem("token", response.data.token);
+      navigate("/");
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 401) {
+          setErrorMessage("Invalid email or password.");
+        } else {
+          setErrorMessage(error.response.data || "Login failed. Please try again.");
+        }
+      } else {
+        setErrorMessage("Unable to connect to the server. Please try again later.");
+      }
+    }
   };
 
   return (
@@ -37,6 +51,11 @@ function Login() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          {errorMessage && (
+            <div className="rounded-lg bg-red-500/10 border border-red-500 text-red-200 px-4 py-3 text-sm">
+              {errorMessage}
+            </div>
+          )}
           <div>
             <label className="block text-sm text-slate-300 mb-2">Email</label>
             <input
