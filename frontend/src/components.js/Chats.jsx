@@ -22,7 +22,7 @@ function Chats({ chats, setChats }) {
       <div className="p-4 border-b border-slate-800">
         <h2 className="text-lg font-semibold text-white">Chat</h2>
       </div>
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      <div className="flex-1 overflow-y-auto px-3 space-y-2">
         {chats.map((chat, index) => (
           <div key={index} className="bg-slate-800 p-3 rounded-lg">
             <p className="text-indigo-400 text-sm font-semibold">{chat.name}</p>
@@ -30,7 +30,7 @@ function Chats({ chats, setChats }) {
           </div>
         ))}
       </div>
-      <div className="p-4 border-t border-slate-800 flex gap-2">
+      <div className="border-t p-3 border-slate-800 flex gap-2">
         <input
           type="text"
           placeholder="Type a message..."

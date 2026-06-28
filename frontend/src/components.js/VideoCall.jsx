@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import socket from "../socket/socket";
 import { useParams } from "react-router-dom";
+import socket from "../socket/socket";
+import VideoStrip from "./room/VideoStrip";
 function VideoCall() {
   const { roomId } = useParams();
   const localVideoRef = useRef(null);
   const localStreamRef = useRef(null);
   const peersRef = useRef({});
   const [remoteStreams, setRemoteStreams] = useState([]);
+  const [micOn, setMicOn] = useState(true);
+  const [cameraOn, setCameraOn] = useState(true);
   const createPeer = (socketId) => {
     const peer = new RTCPeerConnection({
       iceServers: [
@@ -21,9 +24,7 @@ function VideoCall() {
     peer.ontrack = (event) => {
       setRemoteStreams((prev) => {
         const exists = prev.find((s) => s.socketId === socketId);
-
         if (exists) return prev;
-
         return [
           ...prev,
           {
@@ -53,12 +54,14 @@ function VideoCall() {
           audio: true,
         });
         localStreamRef.current = stream;
-        localVideoRef.current.srcObject = stream;
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
+        }
         socket.emit("video-ready", {
           roomId,
         });
       } catch (err) {
-        console.error(err);
+        console.log(err);
       }
     };
     start();
@@ -111,30 +114,27 @@ function VideoCall() {
       socket.off("ice-candidate", handleIceCandidate);
     };
   }, [roomId]);
-
+  const toggleMic = () => {
+    const audioTrack = localStreamRef.current?.getAudioTracks()[0];
+    if (!audioTrack) return;
+    audioTrack.enabled = !audioTrack.enabled;
+    setMicOn(audioTrack.enabled);
+  };
+  const toggleCamera = () => {
+    const videoTrack = localStreamRef.current?.getVideoTracks()[0];
+    if (!videoTrack) return;
+    videoTrack.enabled = !videoTrack.enabled;
+    setCameraOn(videoTrack.enabled);
+  };
   return (
-    <div className="space-y-3">
-      <video
-        ref={localVideoRef}
-        autoPlay
-        playsInline
-        muted
-        className="w-full rounded-lg border border-slate-700"
-      />
-
-      {remoteStreams.map(({ socketId, stream }) => (
-        <video
-          key={socketId}
-          autoPlay
-          playsInline
-          ref={(video) => {
-            if (video) video.srcObject = stream;
-          }}
-          className="w-full rounded-lg border border-slate-700"
-        />
-      ))}
-    </div>
+    <VideoStrip
+      localVideoRef={localVideoRef}
+      remoteStreams={remoteStreams}
+      micOn={micOn}
+      cameraOn={cameraOn}
+      toggleMic={toggleMic}
+      toggleCamera={toggleCamera}
+    />
   );
 }
-
 export default VideoCall;

@@ -45,7 +45,7 @@ function Feedback() {
   return (
     <div className="min-h-screen bg-slate-950 py-10 px-4">
       <div className="max-w-5xl mx-auto">
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl p-8 mb-6">
+        <div className="bg-linear-to-r from-indigo-600 to-purple-600 rounded-xl p-8 mb-6">
           <h1 className="text-4xl font-bold text-white">AI Interview Report</h1>
 
           <p className="text-indigo-100 mt-2">Room ID: {roomId}</p>

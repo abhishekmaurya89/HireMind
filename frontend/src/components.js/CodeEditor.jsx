@@ -19,7 +19,7 @@ function CodeEditor({
     });
   };
   const handleProblemChange = (e) => {
-    if(role!=="host")return;
+    if (role !== "host") return;
     const newProblem = e.target.value;
     setProblem(newProblem);
     socket.emit("problem-change", {
@@ -35,26 +35,19 @@ function CodeEditor({
       language: newLanguage,
     });
   };
-
   return (
-    <div className="h-screen flex flex-col">
-      <div className="bg-slate-900 p-3 border-b border-slate-700">
+    <div className="relative h-full w-full">
+      <div className="absolute top-4 right-4 z-9999">
         <select
           value={language}
           onChange={handleLanguageChange}
-          className="bg-slate-800 text-white px-3 py-2 rounded mb-3"
+          className="bg-slate-800/95 backdrop-blur text-white px-3 py-2 rounded-lg shadow-xl border border-slate-700 focus:outline-none"
         >
           <option value="cpp">C++</option>
           <option value="javascript">JavaScript</option>
           <option value="python">Python</option>
           <option value="java">Java</option>
         </select>
-        <textarea
-          value={problem}
-          onChange={handleProblemChange}
-          placeholder="Enter problem statement..."
-          className="w-full h-24 bg-slate-800 text-white p-2 rounded resize-none"
-        />
       </div>
       <MonacoEditor
         height="100%"
@@ -63,13 +56,12 @@ function CodeEditor({
         onChange={handleEditorChange}
         theme="vs-dark"
         options={{
-          minimap: {
-            enabled: false,
-          },
+          minimap: { enabled: false },
           automaticLayout: true,
         }}
       />
     </div>
   );
 }
+
 export default CodeEditor;
