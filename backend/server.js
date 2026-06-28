@@ -15,7 +15,7 @@ app.use(
   cors({
     origin: process.env.FRONTEND_URL,
   }),
-); 
+);
 app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -33,8 +33,10 @@ try {
 }
 app.use("/api/auth", authRoutes);
 app.use("/api/rooms", roomRoutes);
-app.use("/api/ai", serviceRoutes); 
+app.use("/api/ai", serviceRoutes);
 
-server.listen(5000, () => {
-  console.log("server running on port 5000");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
