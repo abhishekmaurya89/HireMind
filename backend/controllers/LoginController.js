@@ -8,11 +8,11 @@ export const Login = async (req, res) => {
     console.log(req.body);
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json("Invalid Credentials");
+      return res.status(401).json("Invalid Credentials");
     }
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      return res.status(404).json("Invalid Credentials");
+      return res.status(401).json("Invalid Credentials");
     }
     const token = jwt.sign(
       { id: user._id },
